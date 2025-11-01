@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Job Results</title>
+  <title>Job Results</title>
 </head>
 <body>
-    <h2>Matching Jobs</h2>
-    {% if jobs %}
-        <ul>
-        {% for job in jobs %}
-            <li>
-                <strong>{{ job['job_title'] }}</strong><br>
-                {{ job['employer_name'] }} — {{ job['job_city'] }}, {{ job['job_country'] }}<br>
-                <a href="{{ job['job_apply_link'] }}" target="_blank">Apply Now</a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No jobs found for your query.</p>
-    {% endif %}
+  <h2>Showing results for: {{ role }}</h2>
+
+  {% if jobs %}
+    <ul>
+      {% for job in jobs %}
+        <li>
+          <strong>{{ job.get('job_title') }}</strong><br>
+          {{ job.get('employer_name', 'Unknown Company') }}<br>
+          {{ job.get('job_city', '') }}, {{ job.get('job_country', '') }}<br>
+          <a href="{{ job.get('job_apply_link') }}" target="_blank">Apply Now</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No jobs found for this role.</p>
+  {% endif %}
 </body>
 </html>
