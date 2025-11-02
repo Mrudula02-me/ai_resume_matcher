@@ -1,13 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI Resume Matcher</title>
+  <meta charset="UTF-8">
+  <title>AI Resume Matcher</title>
+  <style>
+    body {
+      background-color: #0f1115;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1b1f27;
+      padding: 25px;
+      text-align: center;
+      color: #00bcd4;
+      font-size: 2rem;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+    main {
+      max-width: 800px;
+      margin: 80px auto;
+      text-align: center;
+    }
+    h2 {
+      color: #00bcd4;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.1rem;
+      color: #ccc;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      margin-top: 30px;
+      background-color: #00bcd4;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #0097a7;
+    }
+  </style>
 </head>
 <body>
-    <h2>Find Jobs Based on Your Skills</h2>
-    <form action="/results" method="post">
-        <input type="text" name="job_query" placeholder="Enter desired job title" required>
-        <button type="submit">Search</button>
-    </form>
+  <header>AI Resume Matcher</header>
+  <main>
+    <h2>Find Jobs That Match Your Resume</h2>
+    <p>Upload your resume and get the best matching jobs based on your skills and experience.  
+       You can also get AI-powered skill improvement suggestions!</p>
+    <a href="{{ url_for('upload_resume') }}" class="btn">Upload Your Resume</a>
+  </main>
 </body>
 </html>

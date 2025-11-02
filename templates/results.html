@@ -1,24 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Job Results</title>
+  <meta charset="UTF-8">
+  <title>AI Resume Matcher - Results</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: 50px auto;
+      background-color: #1e1e1e;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+    h1, h2 {
+      color: #ffb74d;
+      text-align: center;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      background: #2b2b2b;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 10px;
+    }
+    .score-box {
+      text-align: center;
+      background-color: #2b2b2b;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      color: #81c784;
+      font-weight: bold;
+    }
+    a.button {
+      display: inline-block;
+      background-color: #ffb74d;
+      color: #000;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+    }
+    a.button:hover {
+      background-color: #ffa726;
+    }
+  </style>
 </head>
 <body>
-  <h2>Showing results for: {{ role }}</h2>
+  <div class="container">
+    <h1>AI Resume Match Results</h1>
 
-  {% if jobs %}
-    <ul>
-      {% for job in jobs %}
-        <li>
-          <strong>{{ job.get('job_title') }}</strong><br>
-          {{ job.get('employer_name', 'Unknown Company') }}<br>
-          {{ job.get('job_city', '') }}, {{ job.get('job_country', '') }}<br>
-          <a href="{{ job.get('job_apply_link') }}" target="_blank">Apply Now</a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No jobs found for this role.</p>
-  {% endif %}
+    <div class="score-box">
+      Resume Match Score: <span>{{ match_score }}%</span>
+    </div>
+
+    <h2>Extracted Resume Skills</h2>
+    {% if extracted_skills %}
+      <ul>
+        {% for skill in extracted_skills %}
+          <li>{{ skill }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No skills found in resume.</p>
+    {% endif %}
+
+    <h2>AI Suggested Skills (from GenAI)</h2>
+    {% if ai_suggested_skills %}
+      <ul>
+        {% for skill in ai_suggested_skills %}
+          <li>{{ skill }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No additional AI-based skills found.</p>
+    {% endif %}
+
+    <h2>Upskilling Advice (from GenAI)</h2>
+    {% if upskilling_advice %}
+      <ul>
+        {% for tip in upskilling_advice %}
+          <li>{{ tip }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No upskilling advice available.</p>
+    {% endif %}
+
+    <h2>Recommended Jobs</h2>
+    {% if matched_jobs %}
+      <ul>
+        {% for job in matched_jobs %}
+          <li>
+            <strong>{{ job.title }}</strong><br>
+            Required Skills: {{ job.skills | join(', ') }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No suitable jobs found at this moment.</p>
+    {% endif %}
+
+    <div style="text-align:center;">
+      <a href="{{ url_for('index') }}" class="button">Upload Another Resume</a>
+    </div>
+  </div>
 </body>
 </html>
