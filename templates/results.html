@@ -6,44 +6,78 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <style>
     body {
-      background-color: #121212;
-      color: #ffffff;
+      background-color: #0f0f0f;
+      color: #f5f5f5;
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
     }
+
     .container {
       width: 90%;
-      max-width: 900px;
+      max-width: 950px;
       margin: 50px auto;
-      background-color: #1e1e1e;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      background-color: #1a1a1a;
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
     }
-    h1, h2 {
+
+    h1 {
       color: #ffb74d;
       text-align: center;
+      font-size: 2em;
+      margin-bottom: 25px;
     }
+
+    h2 {
+      color: #ffd54f;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+      margin-top: 30px;
+    }
+
     ul {
-      list-style-type: none;
+      list-style: none;
       padding: 0;
     }
+
     li {
-      background: #2b2b2b;
-      padding: 10px;
+      background: #262626;
+      padding: 12px;
       margin: 8px 0;
       border-radius: 10px;
+      transition: background 0.3s ease;
     }
+
+    li:hover {
+      background: #333;
+    }
+
     .score-box {
       text-align: center;
       background-color: #2b2b2b;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 20px;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 25px;
       color: #81c784;
       font-weight: bold;
+      font-size: 1.2em;
+      box-shadow: 0 0 10px rgba(129, 199, 132, 0.3);
     }
+
+    .section {
+      background: #202020;
+      border-radius: 12px;
+      padding: 15px 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+
+    .section p {
+      color: #b0bec5;
+    }
+
     a.button {
       display: inline-block;
       background-color: #ffb74d;
@@ -53,10 +87,22 @@
       text-decoration: none;
       font-weight: bold;
       text-align: center;
-      margin-top: 20px;
+      margin-top: 25px;
+      transition: background-color 0.3s ease;
     }
+
     a.button:hover {
       background-color: #ffa726;
+    }
+
+    .empty {
+      color: #9e9e9e;
+      font-style: italic;
+    }
+
+    .highlight {
+      color: #64b5f6;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -65,58 +111,66 @@
     <h1>AI Resume Match Results</h1>
 
     <div class="score-box">
-      Resume Match Score: <span>{{ match_score }}%</span>
+      🧠 Resume Match Score: <span>{{ match_score }}%</span>
     </div>
 
-    <h2>Extracted Resume Skills</h2>
-    {% if extracted_skills %}
-      <ul>
-        {% for skill in extracted_skills %}
-          <li>{{ skill }}</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>No skills found in resume.</p>
-    {% endif %}
+    <div class="section">
+      <h2>📄 Extracted Resume Skills</h2>
+      {% if extracted_skills %}
+        <ul>
+          {% for skill in extracted_skills %}
+            <li>{{ skill }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty">No skills found in the resume.</p>
+      {% endif %}
+    </div>
 
-    <h2>AI Suggested Skills (from GenAI)</h2>
-    {% if ai_suggested_skills %}
-      <ul>
-        {% for skill in ai_suggested_skills %}
-          <li>{{ skill }}</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>No additional AI-based skills found.</p>
-    {% endif %}
+    <div class="section">
+      <h2>🤖 AI Suggested Skills (from GenAI)</h2>
+      {% if ai_suggested_skills and ai_suggested_skills|length > 0 %}
+        <ul>
+          {% for skill in ai_suggested_skills %}
+            <li>⭐ {{ skill }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty">No additional AI-based skills found — possible OpenAI quota issue or limited resume data.</p>
+      {% endif %}
+    </div>
 
-    <h2>Upskilling Advice (from GenAI)</h2>
-    {% if upskilling_advice %}
-      <ul>
-        {% for tip in upskilling_advice %}
-          <li>{{ tip }}</li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>No upskilling advice available.</p>
-    {% endif %}
+    <div class="section">
+      <h2>🚀 Upskilling Advice (from GenAI)</h2>
+      {% if upskilling_advice and upskilling_advice|length > 0 %}
+        <ul>
+          {% for tip in upskilling_advice %}
+            <li>💡 {{ tip }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty">No upskilling advice available at this time.</p>
+      {% endif %}
+    </div>
 
-    <h2>Recommended Jobs</h2>
-    {% if matched_jobs %}
-      <ul>
-        {% for job in matched_jobs %}
-          <li>
-            <strong>{{ job.title }}</strong><br>
-            Required Skills: {{ job.skills | join(', ') }}
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>No suitable jobs found at this moment.</p>
-    {% endif %}
+    <div class="section">
+      <h2>💼 Recommended Jobs</h2>
+      {% if matched_jobs and matched_jobs|length > 0 %}
+        <ul>
+          {% for job in matched_jobs %}
+            <li>
+              <strong class="highlight">{{ job.title }}</strong><br>
+              Required Skills: {{ job.skills | join(', ') }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="empty">No suitable jobs found at this moment.</p>
+      {% endif %}
+    </div>
 
     <div style="text-align:center;">
-      <a href="{{ url_for('index') }}" class="button">Upload Another Resume</a>
+      <a href="{{ url_for('index') }}" class="button">⬅ Upload Another Resume</a>
     </div>
   </div>
 </body>

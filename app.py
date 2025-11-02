@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import os
 from werkzeug.utils import secure_filename
 from resume_parser import extract_skills_from_resume
-from genai_skill_suggester import suggest_skills_with_genai
+from suggest_skills_with_genai import suggest_skills_with_genai
 from job_matching import match_resume_with_jobs
 
 app = Flask(__name__)
